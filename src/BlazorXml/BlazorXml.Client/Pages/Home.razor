@@ -1,0 +1,29 @@
+﻿@page "/"
+@using System.Xml.Serialization
+
+<PageTitle>Xml Deserialization with XElement</PageTitle>
+
+<button @onclick="DeserializeXml">Deserialize XML</button>
+
+<div>
+    Property is null: @(property == null)
+</div>
+<div>
+    Lat: @property?.Map?.Lat <br />
+    Long: @property?.Map?.Long <br />
+    KML exists: @(property?.Map?.KML != null)
+</div>
+
+@code {
+    private Property? property;
+
+    private void DeserializeXml()
+    {
+        string xml = XmlUtils.GetXml();
+
+        XmlSerializer xmlSerializer = new XmlSerializer(typeof(Property));
+
+        using TextReader reader = new StringReader(xml);
+        property = (Property?)xmlSerializer.Deserialize(reader);
+    }
+}
